@@ -49,9 +49,9 @@ nplot = 1000;
 x = linspace(dom_x(1), dom_x(2),nplot);
 y = linspace(dom_y(1), dom_y(2),nplot);
 [x1plot,y1plot] = ndgrid(x,y);
-[Phi_poly,Psi_poly] = evaluate_approximant_coeff(Xplot, Yplot, N1, N2, N3, dom_x, dom_y, f_curve, c);
 Xplot = x1plot(:);
 Yplot = y1plot(:);
+[Phi_poly,Psi_poly] = evaluate_approximant_coeff(Xplot, Yplot, N1, N2, N3, dom_x, dom_y, f_curve, c);
 
 %% Plot the function we're approximating
 
