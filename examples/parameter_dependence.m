@@ -9,21 +9,22 @@ f3 = @(r,t) cos(10*r+10*pi*t).*((r<=0.75)-sqrt(1-r).*(r>0.75));
 % independent grid for error computation
 M = 1000; % nb of grid pts per pole ( compared to 5N_1 sample pts)
 %   --> f1 (poles at x=0,1 and y=0,1)
-X1 = [logspace(log10(eps),0,M)'; 1 - logspace(log10(eps),0,M)'];
-Y1 = [logspace(log10(eps),0,M)'; 1 - logspace(log10(eps),0,M)'];
+X1 = [logspace(log10(eps),0,M)'; 1 - logspace(log10(eps),0,M)'; chebpts(M,[0,1])];
+Y1 = [logspace(log10(eps),0,M)'; 1 - logspace(log10(eps),0,M)'; chebpts(M,[0,1])];
 F1 = f1(X1,Y1');
 %   --> f2 (poles at x=0 and y=0)
-X2 = logspace(log10(eps),0,M)';
-Y2 = logspace(log10(eps),0,M)';
+X2 = [logspace(log10(eps),0,M)'; chebpts(1000,[0,1])];
+Y2 = [logspace(log10(eps),0,M)'; chebpts(1000,[0,1])];
 F2 = f2(X2,Y2');
 %   --> f3 (poles at r=0.75,1)
 r = [0.75 + 0.25*logspace(log10(eps),0,M/2)'; 0.75 - ...
-    0.75*logspace(log10(eps),0,M/2)'; 1 - logspace(log10(eps),0,M)'];
+    0.75*logspace(log10(eps),0,M/2)'; 1 - logspace(log10(eps),0,M)'; chebpts(M,[0,1])];
+r = r(r ~= 0.75);           % delete chebpt at 0.75
 t = [trigpts(M-1); 1]';
 [R3,T3] = ndgrid(r,t);
-F3 = 1.0*reshape(f3(R3, T3), [2*M, M]);
+F3 = 1.0*reshape(f3(R3, T3), [3*M-1, M]);
 
-ListSigma = linspace(0,20,100);
+ListSigma = linspace(0,20,300);
 Error_1 = []; Error_2 = []; Error_3 = [];
 for sigma = ListSigma
     [g, ~, ~] = square_approximation(f1, [0,1,0,1], 'pole_x', [0,1], ...
